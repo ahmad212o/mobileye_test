@@ -2,7 +2,7 @@ import binascii, json
 
 
 class Solution:
-    """contains 3 answers"""
+    """contains 4 answers"""
 
     def __load_data_file(self):
         with open(self.data_file_path, "r") as file:
@@ -30,6 +30,7 @@ class Solution:
         first_line = self.__data[0].replace(" ", "")
         v_name = first_line.split(",")[-1]
         self.version = self.__hex_to_text(v_name)
+        # used version
         return self.version
 
     def __get_protocols_frequencies(self, version: str):
@@ -45,11 +46,13 @@ class Solution:
                 self.prots_frequency[prot] = self.prots_frequency.get(prot, 0) + 1
             else:
                 self.not_relevant_prots.add(prot)
+                # Protocols that are not in the version
         return self.not_relevant_prots
 
     def compare_frequencies(self):
 
         self.__get_protocols_frequencies(self.version)
+        self .not_used_protocols = set()
         self.wrong_freqs = []
         prots_fps = self.__json_data["protocols"]
         for k in self.prots_frequency.keys():
@@ -57,6 +60,11 @@ class Solution:
                 self.__expected_freq[prots_fps[hex(int(k))]["fps"]]
                 != self.prots_frequency[k]
             ):
+               #wrong frequencies
                 self.wrong_freqs.append(k)
+            if self.prots_frequency[k] == 0 :
+                 #Not used protocols
+                self.not_used_protocols.add(hex(int(k)))
 
-        return self.wrong_freqs
+        return self.wrong_freqs.add(hex(int(k)))
+    
